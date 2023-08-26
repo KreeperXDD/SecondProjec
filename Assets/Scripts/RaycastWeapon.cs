@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,25 +11,33 @@ public class RaycastWeapon : MonoBehaviour
         public Vector3 InitialVelocity;
         public TrailRenderer Tracer;
         public float Time;
+        public int bounce;
     }
-    
+
+    public ActiveWeapon.WeaponSlot WeaponSlot;
     public ParticleSystem[] MuzzleFlash;
     public ParticleSystem HitEffect;
     public TrailRenderer TracerEffect;
-    public AnimationClip WeaponAnimation;
     public Transform RaycastOrigin;
     public Transform RaycastDestination;
-
+    public WeaponRecoil Recoil;
     public bool IsFiring = false;
     public int FireRate = 25;
     public float BulletSpeed = 1000.0f;
+    public int MaxBounces = 0;
     public float BulletDrop = 0.0f;
+    public string WeaponName;
     
     private Ray _ray;
     private RaycastHit _hitInfo;
     private List<Bullet> _bullets = new List<Bullet>();
     private float _accumulatedTime;
     private float _maxLifeTime = 3.0f;
+
+    private void Awake()
+    {
+        Recoil = GetComponent<WeaponRecoil>();
+    }
 
     private Vector3 GetPosition(Bullet bullet)
     {
@@ -39,12 +48,15 @@ public class RaycastWeapon : MonoBehaviour
 
     private Bullet CreateBullet(Vector3 position, Vector3 velocity)
     {
-        Bullet bullet = new Bullet();
-        bullet.InitialPosition = position;
-        bullet.InitialVelocity = velocity;
-        bullet.Time = 0.0f;
-        bullet.Tracer = Instantiate(TracerEffect, position, quaternion.identity);
+        Bullet bullet = new Bullet
+        {
+            InitialPosition = position,
+            InitialVelocity = velocity,
+            Time = 0.0f,
+            Tracer = Instantiate(TracerEffect, position, quaternion.identity)
+        };
         bullet.Tracer.AddPosition(position);
+        bullet.bounce = MaxBounces;
         return bullet;
     }
     
@@ -53,6 +65,23 @@ public class RaycastWeapon : MonoBehaviour
         IsFiring = true;
         _accumulatedTime = 0.0f;
         FireBullet();
+    }
+
+    public void UpdateWeapon(float deltaTime)
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            StartFiring();
+        }
+        if (IsFiring)
+        {
+            UpdateFiring(deltaTime);
+        }
+        UpdateBullet(deltaTime);
+        if (Input.GetButtonUp("Fire1"))
+        {
+            StopFiring();
+        }
     }
 
     public void UpdateFiring(float deltaTime)
@@ -100,13 +129,26 @@ public class RaycastWeapon : MonoBehaviour
             HitEffect.transform.forward = _hitInfo.normal;
             HitEffect.Emit(1);
         
-            bullet.Tracer.transform.position = _hitInfo.point;
             bullet.Time = _maxLifeTime;
+            end = _hitInfo.point;
+            
+
+            if (bullet.bounce > 0)
+            {
+                bullet.Time = 0;
+                bullet.InitialPosition = _hitInfo.point;
+                bullet.InitialVelocity = Vector3.Reflect(bullet.InitialVelocity, _hitInfo.normal);
+                bullet.bounce--;
+            }
+
+            var rb2d = _hitInfo.collider.GetComponent<Rigidbody>();
+            if (rb2d)
+            {
+                rb2d.AddForceAtPosition(_ray.direction*20,_hitInfo.point,ForceMode.Impulse);
+            }
         }
-        else
-        {
-            bullet.Tracer.transform.position = end;
-        }
+        
+        bullet.Tracer.transform.position = end;
     }
 
     private void FireBullet()
@@ -119,6 +161,8 @@ public class RaycastWeapon : MonoBehaviour
         Vector3 velocity = (RaycastDestination.position - RaycastOrigin.position).normalized * BulletSpeed;
         var bullet = CreateBullet(RaycastOrigin.position, velocity);
         _bullets.Add(bullet);
+        
+        Recoil.GenerateRecoil();
     }
 
     public void StopFiring()

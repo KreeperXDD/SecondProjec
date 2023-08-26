@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347376682673687373}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.06699991, y: 0.0053, z: 0.8649998}
+  m_LocalPosition: {x: -0.002, y: 0.072, z: 0.219}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9638,18 +9638,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779ac28eccb63cf4db58ec32029bc6e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsFiring: 0
-  FireRate: 25
-  BulletSpeed: 1000
-  BulletDrop: 0
+  WeaponSlot: 1
   MuzzleFlash:
   - {fileID: 8514335107711016175}
   - {fileID: 8797605973370080951}
   HitEffect: {fileID: 633058370173408036}
+  TracerEffect: {fileID: 2764861750422964636, guid: ddf4bafe706e5054db30cc12268096e1, type: 3}
   RaycastOrigin: {fileID: 5060414878424823004}
   RaycastDestination: {fileID: 0}
-  TracerEffect: {fileID: 2764861750422964636, guid: ddf4bafe706e5054db30cc12268096e1, type: 3}
-  WeaponAnimation: {fileID: 7400000, guid: d3a7a9eed9dbf6b41a0f4c6d0f015764, type: 2}
+  IsFiring: 0
+  FireRate: 25
+  BulletSpeed: 1000
+  BulletDrop: 0
+  WeaponName: Pistol
 --- !u!1 &5952437222345973278
 GameObject:
   m_ObjectHideFlags: 0
@@ -24117,7 +24118,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8038611461443794786}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0669, y: 0.0035, z: 0.852}
+  m_LocalPosition: {x: -0.003, y: 0.068, z: 0.193}
   m_LocalScale: {x: 0.02, y: 0.02, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24150,7 +24151,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8800835014632400786}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.067, y: 0.0053, z: 0.865}
+  m_LocalPosition: {x: -0.002, y: 0.072, z: 0.223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

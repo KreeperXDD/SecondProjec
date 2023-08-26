@@ -9599,8 +9599,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8276249961320557910}
   - component: {fileID: 662930075036337259}
+  - component: {fileID: -4966030572292744010}
+  - component: {fileID: -4594394685024770523}
   m_Layer: 0
-  m_Name: WeaponStarterAssault
+  m_Name: WeaponStarterRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9638,18 +9640,90 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779ac28eccb63cf4db58ec32029bc6e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsFiring: 0
-  FireRate: 25
-  BulletSpeed: 1000
-  BulletDrop: 0
+  WeaponSlot: 0
   MuzzleFlash:
   - {fileID: 8514335107711016175}
   - {fileID: 8797605973370080951}
   HitEffect: {fileID: 633058370173408036}
+  TracerEffect: {fileID: 2764861750422964636, guid: ddf4bafe706e5054db30cc12268096e1, type: 3}
   RaycastOrigin: {fileID: 5060414878424823004}
   RaycastDestination: {fileID: 0}
-  TracerEffect: {fileID: 2764861750422964636, guid: ddf4bafe706e5054db30cc12268096e1, type: 3}
-  WeaponAnimation: {fileID: 7400000, guid: 8c1b9d236f2142349af2d184d3f0c221, type: 2}
+  Recoil: {fileID: 0}
+  IsFiring: 0
+  FireRate: 25
+  BulletSpeed: 1000
+  MaxBounces: 0
+  BulletDrop: 0
+  WeaponName: Rifle
+--- !u!114 &-4966030572292744010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2216963735218282435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb58fe0440208d49ad173ce8fde8c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerCamera: {fileID: 0}
+  CameraShake: {fileID: 0}
+  VerticalRecoil: 8
+  Duration: 0.1
+--- !u!114 &-4594394685024770523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2216963735218282435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 1
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 3
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 11400000, guid: cbf53ea557ae0164c9e7aa5ca559adab, type: 2}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &5952437222345973278
 GameObject:
   m_ObjectHideFlags: 0
