@@ -8,13 +8,14 @@ public class ActiveWeapon : MonoBehaviour
     public enum WeaponSlot
     {
        Primary = 0,
-       Secondary= 1
+       Secondary = 1
     }
 
     public Transform CrossHairTarget;
     public Animator RigController;
     public Transform[] WeaponSlots;
     public Cinemachine.CinemachineFreeLook PlayerCamera;
+    public AmmoWidget AmmoWidget;
     
     private RaycastWeapon[] _equippedWeapons = new RaycastWeapon[2];
     private int _activeWeaponIndex;
@@ -29,9 +30,14 @@ public class ActiveWeapon : MonoBehaviour
         }
     }
 
+    public RaycastWeapon GetActiveWeapon()
+    {
+        return GetWeapon(_activeWeaponIndex);
+    }
+    
     private RaycastWeapon GetWeapon(int index)
     {
-        if (index<0 || index>_equippedWeapons.Length)
+        if (index < 0 || index > _equippedWeapons.Length)
         {
             return null;
         }
@@ -72,9 +78,11 @@ public class ActiveWeapon : MonoBehaviour
         weapon = newWeapon;
         weapon.RaycastDestination = CrossHairTarget;
         weapon.Recoil.PlayerCamera = PlayerCamera;
+        weapon.Recoil.RigController = RigController;
         weapon.transform.SetParent(WeaponSlots[weaponSlotIndex],false);
         _equippedWeapons[weaponSlotIndex] = weapon;
         SetActiveWeapon(newWeapon.WeaponSlot);
+        AmmoWidget.Refresh(weapon.AmmoCount);
     }
 
     private void ToggleActiveWeapon()
@@ -102,6 +110,7 @@ public class ActiveWeapon : MonoBehaviour
         
         StartCoroutine(SwitchWeapon(holsterIndex,activateIndex));
     }
+    
     private IEnumerator SwitchWeapon(int holsterIndex, int activateIndex)
     {
         yield return StartCoroutine(HolsterWeapon(holsterIndex));

@@ -11,7 +11,7 @@ public class RaycastWeapon : MonoBehaviour
         public Vector3 InitialVelocity;
         public TrailRenderer Tracer;
         public float Time;
-        public int bounce;
+        public int Bounce;
     }
 
     public ActiveWeapon.WeaponSlot WeaponSlot;
@@ -21,12 +21,15 @@ public class RaycastWeapon : MonoBehaviour
     public Transform RaycastOrigin;
     public Transform RaycastDestination;
     public WeaponRecoil Recoil;
+    public GameObject Magazine;
     public bool IsFiring = false;
     public int FireRate = 25;
     public float BulletSpeed = 1000.0f;
     public int MaxBounces = 0;
     public float BulletDrop = 0.0f;
     public string WeaponName;
+    public int AmmoCount;
+    public int ClipSize;
     
     private Ray _ray;
     private RaycastHit _hitInfo;
@@ -56,7 +59,7 @@ public class RaycastWeapon : MonoBehaviour
             Tracer = Instantiate(TracerEffect, position, quaternion.identity)
         };
         bullet.Tracer.AddPosition(position);
-        bullet.bounce = MaxBounces;
+        bullet.Bounce = MaxBounces;
         return bullet;
     }
     
@@ -65,6 +68,7 @@ public class RaycastWeapon : MonoBehaviour
         IsFiring = true;
         _accumulatedTime = 0.0f;
         FireBullet();
+        Recoil.Reset();
     }
 
     public void UpdateWeapon(float deltaTime)
@@ -132,13 +136,12 @@ public class RaycastWeapon : MonoBehaviour
             bullet.Time = _maxLifeTime;
             end = _hitInfo.point;
             
-
-            if (bullet.bounce > 0)
+            if (bullet.Bounce > 0)
             {
                 bullet.Time = 0;
                 bullet.InitialPosition = _hitInfo.point;
                 bullet.InitialVelocity = Vector3.Reflect(bullet.InitialVelocity, _hitInfo.normal);
-                bullet.bounce--;
+                bullet.Bounce--;
             }
 
             var rb2d = _hitInfo.collider.GetComponent<Rigidbody>();
@@ -153,6 +156,11 @@ public class RaycastWeapon : MonoBehaviour
 
     private void FireBullet()
     {
+        if (AmmoCount <= 0)
+        {
+            return;
+        }
+        AmmoCount--;
         foreach (var particle in MuzzleFlash)
         {
             particle.Emit(1);
@@ -162,7 +170,7 @@ public class RaycastWeapon : MonoBehaviour
         var bullet = CreateBullet(RaycastOrigin.position, velocity);
         _bullets.Add(bullet);
         
-        Recoil.GenerateRecoil();
+        Recoil.GenerateRecoil(WeaponName);
     }
 
     public void StopFiring()
