@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class WeaponRecoil : MonoBehaviour
 {
-    [HideInInspector] public Cinemachine.CinemachineFreeLook PlayerCamera;
+    [HideInInspector] public CharacterAiming Aiming;
     [HideInInspector] public Cinemachine.CinemachineImpulseSource CameraShake;
     [HideInInspector] public Animator RigController;
     
     public Vector2[] RecoilPattern;
     public float Duration;
+    public float RecoilModifier = 1.0f;
     
     private float _time;
     private int _index;
@@ -48,10 +50,10 @@ public class WeaponRecoil : MonoBehaviour
     }
     private void Update()
     {
-        if (_time>0)
+        if (_time > 0)
         {
-            PlayerCamera.m_YAxis.Value -= ((_verticalRecoil/1000) * Time.deltaTime) / Duration;
-            PlayerCamera.m_XAxis.Value -= ((_horizontalRecoil/10) * Time.deltaTime) / Duration;
+            Aiming.YAxis.Value -= (((_verticalRecoil/10) * Time.deltaTime) / Duration)*RecoilModifier;
+            Aiming.XAxis.Value -= (((_horizontalRecoil/10) * Time.deltaTime) / Duration)*RecoilModifier;
             _time -= Time.deltaTime;
         }
     }
